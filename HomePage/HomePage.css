@@ -20,11 +20,22 @@
     background-color: #e46a35;
 }
 
-.bg-primary-important{
-    background-color: #e46a35;
+.bg-primary{
+    background-color: #e46a35 !important;
 }
 
-.bg-primary-important-inverse{
-    background-color: #fff;
-    color : #fff;
+.bg-dark{
+    background-color: #555d66 !important;
+}
+
+.btn-primary{
+    color:#e46a35 !important;
+    background-color:#fff !important;
+    border-color:#fff !important;
+}
+
+.btn-primary:hover{
+    color:#555d66 !important;
+    background-color:#fff !important;
+    border-color:#fff !important;
 }

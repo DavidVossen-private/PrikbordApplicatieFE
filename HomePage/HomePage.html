@@ -1,113 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Digitaal prikbord </title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="stylesheet" href="HomePage.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="HomePage.css">
+
+  <script>
+    window.onload = getCardArray();
+
+    function getCardArray() {
+      var xhp = new XMLHttpRequest();
+      xhp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          console.log(this.responseText)
+          var cardArrayObject = JSON.parse(this.responseText);
+          var hetElement = document.getElementById("Korea");
+          hetElement.innerHTML = makeCardGrid(cardArrayObject);
+        }
+      }
+      xhp.open("GET", "http://localhost:8082/api/card/all", true);
+      xhp.send();
+    }
+
+    function makeCardGrid(inputObject) {
+      // Check if object is filled
+      if (inputObject.length <= 0) return "error";
+
+      // Start HTML table with header
+      var html = "<div class='row'>";
+      // Loop through members of the object
+      for (var i = 0; i < inputObject.length; i++) {
+        tempObject = inputObject[i];
+        console.log(tempObject);
+        // Add our row:
+        html += cardObjectToHtmlCard(tempObject);
+      }
+      // Finish the table:
+      html += "</table>";
+      // Return the table
+      return html;
+    }
+
+    function cardObjectToHtmlCard(inputCardObject) {
+      return "<div class='col-md-4 mb-5'> <div class='card'>" + returnCardImage(inputCardObject.type) +
+        "<div class='card-body'> <h4 class='card-title'>" + inputCardObject.title + "</h4> <p class='card-text'>" +
+        tempObject.inputCardObject + "</p> </div> </div> </div>";
+    }
+
+    function returnCardImage(inputStringType) {
+      HEIGHT_IN_PIXELS = 240;
+      PRE_STRING = "<img height = " + HEIGHT_IN_PIXELS + "class='card-img-top' src=";
+
+      if (inputStringType == "Aanbod") {
+        return PRE_STRING + "'https://i.ytimg.com/vi/EfX_yD8xAXM/maxresdefault.jpg' alt=''>";
+      } else if (inputStringType == "Vraag") {
+        return PRE_STRING + "'https://www.2oceansvibe.com/wp-content/uploads/2018/03/begging.jpg' alt=''>";
+      } else {
+        return PRE_STRING + "'https://upload.wikimedia.org/wikipedia/commons/d/d2/Question_mark.svg' alt=''>";
+      }
+    }
+
+  </script>
 </head>
-<body> 
 
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-    <div class="container">
-      <a class="navbar-brand" href="#">Young Colfield</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Mijn account</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Deelnemerslijst</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <body>
 
-  <!-- Header -->
-  <header class="bg-primary-important py-5 mb-5">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-lg-12">
-          <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
-          <p class="lead mb-5 text-white-50">Hier kunt u een vraag of aanbod plaatsen.</p>
-            <a class="btn btn-primary btn-lg" href="#">Klik om te plaatsen &raquo;</a>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Young Colfield</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive"
+          aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Mijn account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Deelnemerslijst</a>
+            </li>
+          </ul>
         </div>
       </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-primary py-5 mb-5">
+      <div class="container h-100">
+        <div class="row h-100 align-items-center">
+          <div class="col-lg-12">
+            <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
+            <p class="lead mb-5 text-white">Hier kunt u een vraag of aanbod plaatsen.</p>
+            <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal" href="#">
+              Klik om te plaatsen &raquo; </a>
+          </div>
+        </div>
+    </header>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Maak Nieuwe User Aan</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>Omschrijving:</td>
+                <td>
+                  <form>
+                    <label class="radio-inline"> <input type="radio" name="inputType" checked> Aanbod </label>
+                    <label class="radio-inline"> <input type="radio" name="inputType"> Vraag </label>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>Titel (max 40 tekens):</td>
+                <td><input type=text id=inputTitle class="form-control" maxlength="40"></td>
+              </tr>
+              <tr>
+                <td>Omschrijving (max 200 tekens):</td>
+                <td> <textarea class="form-control" rows="5" id="comment" maxlength="200"></textarea>           
+                </td>
+              </tr>
+            </table>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick=createUser() data-dismiss="modal">Save
+              changes</button>
+          </div>
+        </div>
+      </div>
     </div>
-  </header>
 
-  <!-- Page Content -->
-  <div class="container">
-    <!-- /.row -->
-
-    <div class="card-deck">
-      
-        <div class="card">
-          <img class="card-img-top" src="http://placehold.it/300x200" alt="">
-          <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus.</p>
-          </div>
-          <div class="card-footer">
-            <a href="#" class="btn btn-primary">Find Out More!</a>
-          </div>
-        </div>
-      
-        <div class="card">
-          <img class="card-img-top" src="http://placehold.it/300x200" alt="">
-          <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque sequi doloribus totam ut praesentium aut.</p>
-          </div>
-          <div class="card-footer">
-            <a href="#" class="btn btn-primary">Find Out More!</a>
-          </div>
-        </div>
-      
-        <div class="card">
-          <img class="card-img-top" src="http://placehold.it/300x200" alt="">
-          <div class="card-body">
-            <h4 class="card-title">Card title</h4>
-            <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
-          </div>
-          <div class="card-footer">
-            <a href="#" class="btn btn-primary">Find Out More!</a>
-          </div>
-        </div>
-      
-    </div>
-    <!-- /.row -->
-
-  </div>
-  <!-- /.container -->
-
-  <!-- Footer -->
-  <footer class="py-5 bg-dark">
+    <!-- Page Content -->
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Young Colfield 2019</p>
+      <!-- /.row -->
+      <div class="row" id="Korea">
+      </div>
+      <!-- /.row -->
     </div>
     <!-- /.container -->
-  </footer>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Young Colfield 2019</p>
+      </div>
+      <!-- /.container -->
+    </footer>
 
-</body>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
 
 </html>
