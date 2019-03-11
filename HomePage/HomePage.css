@@ -31,11 +31,11 @@
 .btn-primary{
     color:#e46a35 !important;
     background-color:#fff !important;
-    border-color:#fff;
+    border-color:#fff !important;
 }
 
 .btn-primary:hover{
-    color:#555d66;
-    background-color:#fff;
-    border-color:#fff;
+    color:#555d66 !important;
+    background-color:#fff !important;
+    border-color:#fff !important;
 }
