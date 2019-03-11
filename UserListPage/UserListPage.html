@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Digitaal prikbord </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="UserListPage.css">
+  <script>
+      window.onload = login();
+      function login(){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+          if(this.readyState == 4){
+            var users = JSON.parse(this.responseText);
+            maakUserTabel(users);
+          }
+        }
+        var url = "http://localhost:8082/api/user/all";
+        xhr.open("GET",url, true);
+        xhr.send();
+      }
+      function maakUserTabel(users){
+        console.log(users);
+        var tableString = "<table class='table table-striped'>";
+        tableString += "<tr><th>Voornaam</th><th>LastNaam</th><th>EmailAddress</th></tr>";
+        for(var i = 0; i < users.length ; i++){
+          tableString += "<tr><td>"+users[i].firstName+"</td><td>"+users[i].firstName+"</td><td>"+users[i].firstName+"</td></tr>"
+        }
+        tableString += "</table>";
+        var tableHolder = document.getElementById("tableHolder");
+        tableHolder.innerHTML = tableString;
+      }
+      function createUser(){
+        var user = {};
+        user.firstName = document.getElementById("inputFirstName").value;
+        user.lastName = document.getElementById("inputLastName").value;
+        user.email = document.getElementById("inputEmail").value;
+        user.password = document.getElementById("inputPassword").value;
+        console.log(user);
+        user = JSON.stringify(user);
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+          alert("post"+this.responseText);
+          if(this.readyState == 4){
+            //var users = JSON.parse(this.responseText);
+
+          }
+        }
+        var url = "http://localhost:8082/api/user/new";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(user);
+
+      }
+  </script>
+</head>
+  
+<body> 
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Young Colfield</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Mijn account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Deelnemerslijst</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-primary-important py-5 mb-5">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-12">
+          <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
+          <p class="lead mb-5 text-white-50">U treft hier alle gebruikers van het systeem</p>
+            <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal">Klik om een nieuwe user te maken</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container" id="tableHolder">
+
+  </div>
+  <div></div>
+  <!-- /.container -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Maak Nieuwe User Aan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table>
+                <tr><td>FirstName:</td><td><input type=text id=inputFirstName class="form-control"></td></tr>
+                <tr><td>LastName:</td><td><input type=text id=inputLastName class="form-control"></td></tr>
+                <tr><td>EmailAddress:</td><td><input type=text id=inputEmail class="form-control"></td></tr>
+                <tr><td>Password:</td><td><input type=text id=inputPassword class="form-control"></td></tr>
+            </table>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick=createUser() data-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Young Colfield 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+
+</body>
+
+</html>
