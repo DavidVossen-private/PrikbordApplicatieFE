@@ -28,3 +28,18 @@
     background-color: #fff;
     color : #fff;
 }
+.btn-primary{
+    color:#e46a35;
+    background-color: #fff;
+    border-color:#fff;
+  }
+  .btn-primary:hover{
+    color:#555d66;
+    background-color: #fff;
+    border-color:#fff; 
+  }
+  .btn-primary:target{
+    color:#555d66;
+    background-color: #fff;
+    border-color:#fff; 
+  }

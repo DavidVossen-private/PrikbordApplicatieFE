@@ -35,6 +35,28 @@
         var tableHolder = document.getElementById("tableHolder");
         tableHolder.innerHTML = tableString;
       }
+      function createUser(){
+        var user = {};
+        user.firstName = document.getElementById("inputFirstName").value;
+        user.lastName = document.getElementById("inputLastName").value;
+        user.email = document.getElementById("inputEmail").value;
+        user.password = document.getElementById("inputPassword").value;
+        console.log(user);
+        user = JSON.stringify(user);
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+          alert("post"+this.responseText);
+          if(this.readyState == 4){
+            //var users = JSON.parse(this.responseText);
+
+          }
+        }
+        var url = "http://localhost:8082/api/user/new";
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(user);
+
+      }
   </script>
 </head>
   
@@ -72,7 +94,7 @@
         <div class="col-lg-12">
           <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
           <p class="lead mb-5 text-white-50">U treft hier alle gebruikers van het systeem</p>
-            <a class="btn btn-primary btn-lg" href="#">Klik om een nieuwe user te maken</a>
+            <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal">Klik om een nieuwe user te maken</a>
         </div>
       </div>
     </div>
@@ -84,7 +106,33 @@
   </div>
   <div></div>
   <!-- /.container -->
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Maak Nieuwe User Aan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table>
+                <tr><td>FirstName:</td><td><input type=text id=inputFirstName class="form-control"></td></tr>
+                <tr><td>LastName:</td><td><input type=text id=inputLastName class="form-control"></td></tr>
+                <tr><td>EmailAddress:</td><td><input type=text id=inputEmail class="form-control"></td></tr>
+                <tr><td>Password:</td><td><input type=text id=inputPassword class="form-control"></td></tr>
+            </table>
 
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick=createUser() data-dismiss="modal">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- Footer -->
   <footer class="py-5 bg-dark">
     <div class="container">
