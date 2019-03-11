@@ -9,7 +9,7 @@
 }
 
 .bg-image {
-  background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/7c/Infinite-corridor-bboard.jpeg');
+  background-image: url('../images/prikbord.jpeg');
   background-size: cover;
   background-position: center;
 }
