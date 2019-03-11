@@ -88,10 +88,10 @@
 .btn-primary{
   color:#e46a35;
   background-color: #fff;
-  border-color:#fff;
+  border-color:#e46a35;
 }
 .btn-primary:hover{
   color:#555d66;
   background-color: #fff;
-  border-color:#fff; 
+  border-color:#e46a35; 
 }
