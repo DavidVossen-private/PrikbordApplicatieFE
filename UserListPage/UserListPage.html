@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Digitaal prikbord </title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="UserListPage.css">
+  <script>
+      window.onload = login();
+      function login(){
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function(){
+          if(this.readyState == 4){
+            var users = JSON.parse(this.responseText);
+            maakUserTabel(users);
+          }
+        }
+        var url = "http://localhost:8082/api/user/all";
+        xhr.open("GET",url, true);
+        xhr.send();
+      }
+      function maakUserTabel(users){
+        console.log(users);
+        var tableString = "<table class='table table-striped'>";
+        tableString += "<tr><th>Voornaam</th><th>LastNaam</th><th>EmailAddress</th></tr>";
+        for(var i = 0; i < users.length ; i++){
+          tableString += "<tr><td>"+users[i].firstName+"</td><td>"+users[i].firstName+"</td><td>"+users[i].firstName+"</td></tr>"
+        }
+        tableString += "</table>";
+        var tableHolder = document.getElementById("tableHolder");
+        tableHolder.innerHTML = tableString;
+      }
+  </script>
+</head>
+  
+<body> 
+
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Young Colfield</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarResponsive">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+          <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Mijn account</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Deelnemerslijst</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Header -->
+  <header class="bg-primary-important py-5 mb-5">
+    <div class="container h-100">
+      <div class="row h-100 align-items-center">
+        <div class="col-lg-12">
+          <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
+          <p class="lead mb-5 text-white-50">U treft hier alle gebruikers van het systeem</p>
+            <a class="btn btn-primary btn-lg" href="#">Klik om een nieuwe user te maken</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Content -->
+  <div class="container" id="tableHolder">
+
+  </div>
+  <div></div>
+  <!-- /.container -->
+
+  <!-- Footer -->
+  <footer class="py-5 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Young Colfield 2019</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+
+
+</body>
+
+</html>
