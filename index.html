@@ -16,11 +16,9 @@
         var loginPassword = document.getElementById("inputPassword").value;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function(){
-            alert(this.responseText);
             window.location = "HomePage/HomePage.html";
         }
         var url = "http://localhost:8082/api/user/"+loginNaam+ "/"+loginPassword;
-        alert(url);
         xhr.open("POST",url, true);
         xhr.send("{}");
       }
@@ -52,7 +50,7 @@
                       </div>
                       <button class="btn btn-lg btn-primary btn-block btn-login text-uppercase font-weight-bold mb-2" onclick=login()>Sign in</button>
                       <div class="text-center">
-                        <a class="small" href="#">Forgot password?</a></div>
+                      <!--  <a class="small" href="#">Forgot password?</a></div>  -->
                   </div>
                 </div>
               </div>

@@ -27,9 +27,9 @@
       function maakUserTabel(users){
         console.log(users);
         var tableString = "<table class='table table-striped'>";
-        tableString += "<tr><th>Voornaam</th><th>LastNaam</th><th>EmailAddress</th></tr>";
+        tableString += "<tr><th>Id</th><th>Voornaam</th><th>LastNaam</th><th>EmailAddress</th></tr>";
         for(var i = 0; i < users.length ; i++){
-          tableString += "<tr><td>"+users[i].firstName+"</td><td>"+users[i].firstName+"</td><td>"+users[i].firstName+"</td></tr>"
+          tableString += "<tr><td>"+users[i].id+"</td><td>"+users[i].firstName+"</td><td>"+users[i].lastName+"</td><td>"+users[i].email+"</td></tr>"
         }
         tableString += "</table>";
         var tableHolder = document.getElementById("tableHolder");
@@ -45,9 +45,9 @@
         user = JSON.stringify(user);
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function(){
-          alert("post"+this.responseText);
           if(this.readyState == 4){
-            //var users = JSON.parse(this.responseText);
+            console.log("yes");
+            window.location = '';
 
           }
         }
@@ -67,17 +67,17 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">Young Colfield</a>
+      <a class="navbar-brand">Young Colfield</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-          <a class="nav-link" href="#">Home</a>
+          <a class="nav-link" href="../HomePage/HomePage.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Mijn account</a>
+            <a class="nav-link" href="../index.html">Mijn account</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Deelnemerslijst</a>
@@ -122,7 +122,7 @@
                 <tr><td>FirstName:</td><td><input type=text id=inputFirstName class="form-control"></td></tr>
                 <tr><td>LastName:</td><td><input type=text id=inputLastName class="form-control"></td></tr>
                 <tr><td>EmailAddress:</td><td><input type=text id=inputEmail class="form-control"></td></tr>
-                <tr><td>Password:</td><td><input type=text id=inputPassword class="form-control"></td></tr>
+                <tr><td>Password:</td><td><input type=password id=inputPassword class="form-control"></td></tr>
             </table>
 
         </div>
