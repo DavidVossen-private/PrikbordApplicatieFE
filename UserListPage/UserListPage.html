@@ -55,7 +55,6 @@
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(user);
-
       }
   </script>
 </head>
@@ -127,8 +126,8 @@
 
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick=createUser() data-dismiss="modal">Save changes</button>
+          <button type="button" class="btn btn-secondary" onclick=createUser() data-dismiss="modal">Save changes</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
