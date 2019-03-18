@@ -40,7 +40,7 @@
         tempObject = inputObject[i];
         console.log(tempObject);
         // Add our row:
-        html += cardObjectToHtmlCard(tempObject);
+        html += cardObjectToHtmlCard(tempObject, i);
       }
       // Finish the table:
       //html += "</div>";
@@ -48,7 +48,7 @@
       return html;
     }
   
-    function cardObjectToHtmlCard(inputCardObject) {
+    function cardObjectToHtmlCard(inputCardObject, iteration) {
       console.log(inputCardObject)
       return "<div class='col-md-4 mb-5'>" + 
                 "<a onclick=onModalLoad() data-toggle='modal' data-target='#detailModal' href='#'>" +
@@ -59,10 +59,25 @@
                     "<h4 class='card-title'>" + inputCardObject.title + "</h4>" + 
                     "<p class='card-text'>" + inputCardObject.description + "</p>" + 
                   "</div>" +
-                  "<div class='card-footer'>" + inputCardObject.userId + "</div>" +
-                "</a>" +
+                  "<div class='card-footer'> <div id='VariableFooter" + iteration + "'> </div>" + getUserFromID(inputCardObject.userId, iteration) + "</div>" +
                 "</div>" +
+                "</a>" +
               "</div>";
+    }
+
+    function getUserFromID(inputStringId, iteration) {
+      var xhp = new XMLHttpRequest();
+      xhp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          console.log(this.responseText)
+          var userObject = JSON.parse(this.responseText);
+          var hetElement = document.getElementById("VariableFooter" + iteration);
+          hetElement.innerHTML = userObject.firstName + " "+ userObject.lastName;
+        }
+      }
+      xhp.open("GET", "http://localhost:8082/api/user/" + inputStringId, true);
+      xhp.send();
+      return " ";
     }
 
     function returnCardTitle(inputStringType) {
