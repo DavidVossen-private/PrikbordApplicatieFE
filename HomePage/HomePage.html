@@ -40,7 +40,7 @@
         tempObject = inputObject[i];
         console.log(tempObject);
         // Add our row:
-        html += cardObjectToHtmlCard(tempObject);
+        html += cardObjectToHtmlCard(tempObject, i);
       }
       // Finish the table:
       //html += "</div>";
@@ -48,11 +48,46 @@
       return html;
     }
   
-    function cardObjectToHtmlCard(inputCardObject) {
-      return "  "+
-                "<div class='col-md-4 mb-5'> <a onclick=onModalLoad('"+inputCardObject.id+"') data-toggle='modal' data-target='#detailModal' href='#'> <div class='card'> " + returnCardImage(inputCardObject.type) +
-        "<div class='card-body'> <h4 class='card-title'>" + inputCardObject.title + "</h4> <p class='card-text'>" +
-        inputCardObject.description + "</p> </div> </div> </a> </div>";
+    function cardObjectToHtmlCard(inputCardObject, iteration) {
+      console.log(inputCardObject)
+      return "<div class='col-md-4 mb-5'>" + 
+                "<a onclick=onModalLoad('" + inputCardObject.id + "') data-toggle='modal' data-target='#detailModal' href='#'>" +
+                "<div class='card'>" +
+                  "<div class='card-header'> <h2> <p class='text-center'>" + returnCardTitle(inputCardObject.type) + "</p> </h2> </div>" +
+                  returnCardImage(inputCardObject.type) +
+                  "<div class='card-body'>" + 
+                    "<h4 class='card-title'>" + inputCardObject.title + "</h4>" + 
+                    "<p class='card-text'>" + inputCardObject.description + "</p>" + 
+                  "</div>" +
+                  "<div class='card-footer'> <div id='VariableFooter" + iteration + "'> </div>" + getUserFromID(inputCardObject.userId, iteration) + "</div>" +
+                "</div>" +
+                "</a>" +
+              "</div>";
+    }
+
+    function getUserFromID(inputStringId, iteration) {
+      var xhp = new XMLHttpRequest();
+      xhp.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          console.log(this.responseText)
+          var userObject = JSON.parse(this.responseText);
+          var hetElement = document.getElementById("VariableFooter" + iteration);
+          hetElement.innerHTML = userObject.firstName + " "+ userObject.lastName;
+        }
+      }
+      xhp.open("GET", "http://localhost:8082/api/user/" + inputStringId, true);
+      xhp.send();
+      return " ";
+    }
+
+    function returnCardTitle(inputStringType) {
+      if (inputStringType == "Aanbod") {
+        return "Aangeboden";
+      } else if (inputStringType == "Vraag") {
+        return "Gevraagd";
+      } else {
+        return "Onbekend";
+      }
     }
 
     function returnCardImage(inputStringType) {
@@ -106,8 +141,6 @@
           document.getElementById("dtDate").innerHTML=responseObject.date;
           document.getElementById("dtuserName").innerHTML=responseObject.user.firstName +" "+ responseObject.user.lastName;
           document.getElementById("dtemail").innerHTML=responseObject.user.email;
-
-
         }
       }
       var url = "http://localhost:8082/api/card/"+cardID;
@@ -166,22 +199,12 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-
           <div class="modal-body">
             <table>
-              <tr>
-                <td>User ID:</td>
-                <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td>
-              </tr>
-              <tr>
+              <tr> <td>User ID:</td> <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td> </tr> <tr>
                 <td> Omschrijving: </td>
-                <td>
-                  <form>
-                    <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod
-                    </label>
-                    <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label>
-                  </form>
-                </td>
+                <td> <form> <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod </label>
+                            <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label> </form> </td>
               </tr>
               <tr>
                 <td>Titel (max 40 tekens):</td>
