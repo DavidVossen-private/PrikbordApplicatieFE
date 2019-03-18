@@ -50,7 +50,7 @@
   
     function cardObjectToHtmlCard(inputCardObject) {
       return "  "+
-                "<div class='col-md-4 mb-5'> <a onclick=onModalLoad() data-toggle='modal' data-target='#detailModal' href='#'> <div class='card'> " + returnCardImage(inputCardObject.type) +
+                "<div class='col-md-4 mb-5'> <a onclick=onModalLoad('"+inputCardObject.id+"') data-toggle='modal' data-target='#detailModal' href='#'> <div class='card'> " + returnCardImage(inputCardObject.type) +
         "<div class='card-body'> <h4 class='card-title'>" + inputCardObject.title + "</h4> <p class='card-text'>" +
         inputCardObject.description + "</p> </div> </div> </a> </div>";
     }
@@ -93,8 +93,26 @@
       xhr.send(JSON.stringify(card));
     }
 
-    function onModalLoad(){
-      alert();
+    function onModalLoad(cardID){
+      var xhr = new XMLHttpRequest();
+      xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          var responseObject = JSON.parse(this.responseText);
+          console.log(this.responseText);
+          document.getElementById("dtinputUserId").innerHTML = responseObject.user.id;
+          document.getElementById("dtinputTitle").innerHTML=responseObject.title;
+          document.getElementById("dtinputType").innerHTML=responseObject.type;
+          document.getElementById("dtinputDescription").innerHTML=responseObject.description;
+          document.getElementById("dtDate").innerHTML=responseObject.date;
+          document.getElementById("dtuserName").innerHTML=responseObject.user.firstName +" "+ responseObject.user.lastName;
+          document.getElementById("dtemail").innerHTML=responseObject.user.email;
+
+
+        }
+      }
+      var url = "http://localhost:8082/api/card/"+cardID;
+      xhr.open("GET", url, true);
+      xhr.send();
     }
 
   </script>
@@ -191,7 +209,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Details card</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Details kaart</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -201,26 +219,33 @@
             <table>
               <tr>
                 <td>User ID:</td>
-                <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td>
+                <td><div type="number" id=dtinputUserId ></div></td>
               </tr>
               <tr>
-                <td> bekijk details </td>
+                <td>Naam: </td>
+                <td><div type="text" id=dtuserName ></div></td>
+              </tr>
+              <tr>
+                <td>Email: </td>
+                <td><div type="text" id=dtemail ></div></td>
+              <tr>
+                <td> Soort </td>
                 <td>
-                  <form>
-                    <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod
-                    </label>
-                    <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label>
-                  </form>
+                  <div type="text" id=dtinputType></div>
                 </td>
               </tr>
               <tr>
-                <td>Titel (max 40 tekens):</td>
-                <td><input type="text" id=inputTitle class="form-control" maxlength="40"></td>
+                <td>Titel: </td>
+                <td><div type="text" id=dtinputTitle></td>
               </tr>
               <tr>
-                <td>Omschrijving (max 200 tekens):</td>
-                <td> <textarea class="form-control" id=inputDescription rows="5" maxlength="200"></textarea> </td>
+                <td>Omschrijving:</td>
+                <td> <div type="text" id=dtinputDescription></div> </td>
               </tr>
+              <tr>
+                <td>Aangemaakt op:</dt>
+                <td> <div type="text" id=dtDate></div></td>
+                </tr>
             </table>
           </div>
 
@@ -250,9 +275,6 @@
       <!-- /.container -->
     </footer>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   </body>
 
