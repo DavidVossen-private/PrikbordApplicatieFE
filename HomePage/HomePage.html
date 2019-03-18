@@ -49,9 +49,28 @@
     }
 
     function cardObjectToHtmlCard(inputCardObject) {
-      return "<div class='col-md-4 mb-5'> <div class='card'>" + returnCardImage(inputCardObject.type) +
-        "<div class='card-body'> <h4 class='card-title'>" + inputCardObject.title + "</h4> <p class='card-text'>" +
-        inputCardObject.description + "</p> </div> </div> </div>";
+      console.log(inputCardObject)
+      return "<div class='col-md-4 mb-5'>" + 
+                "<div class='card'>" +
+                  "<div class='card-header'> <h2> <p class='text-center'>" + returnCardTitle(inputCardObject.type) + "</p> </h2> </div>" +
+                  returnCardImage(inputCardObject.type) +
+                  "<div class='card-body'>" + 
+                    "<h4 class='card-title'>" + inputCardObject.title + "</h4>" + 
+                    "<p class='card-text'>" + inputCardObject.description + "</p>" + 
+                  "</div>" +
+                  "<div class='card-footer'>" + inputCardObject.userId + "</div>" +
+                "</div>" +
+              "</div>";
+    }
+
+    function returnCardTitle(inputStringType) {
+      if (inputStringType == "Aanbod") {
+        return "Aangeboden";
+      } else if (inputStringType == "Vraag") {
+        return "Gevraagd";
+      } else {
+        return "Onbekend";
+      }
     }
 
     function returnCardImage(inputStringType) {
@@ -143,22 +162,12 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-
           <div class="modal-body">
             <table>
-              <tr>
-                <td>User ID:</td>
-                <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td>
-              </tr>
-              <tr>
+              <tr> <td>User ID:</td> <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td> </tr> <tr>
                 <td> Omschrijving: </td>
-                <td>
-                  <form>
-                    <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod
-                    </label>
-                    <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label>
-                  </form>
-                </td>
+                <td> <form> <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod </label>
+                            <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label> </form> </td>
               </tr>
               <tr>
                 <td>Titel (max 40 tekens):</td>
