@@ -47,6 +47,12 @@ a:hover, a:visited, a:link, a:active
     border-color:#fff !important;
 }
 
+.btn-secondary{
+    color:#fff !important;
+    background-color:#e46a35 !important;
+    border-color:#e46a35 !important;
+}
+
 .btn-primary:hover{
     color:#555d66 !important;
     background-color:#fff !important;
