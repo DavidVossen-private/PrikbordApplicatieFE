@@ -19,7 +19,7 @@
       var xhp = new XMLHttpRequest();
       xhp.onreadystatechange = function () {
         if (this.readyState == 4) {
-          console.log(this.responseText)
+          //console.log(this.responseText)
           var cardArrayObject = JSON.parse(this.responseText);
           var hetElement = document.getElementById("Korea");
           hetElement.innerHTML = makeCardGrid(cardArrayObject);
@@ -38,7 +38,7 @@
       // Loop through members of the object
       for (var i = 0; i < inputObject.length; i++) {
         tempObject = inputObject[i];
-        console.log(tempObject);
+        //console.log(tempObject);
         // Add our row:
         html += cardObjectToHtmlCard(tempObject);
       }
@@ -78,12 +78,12 @@
         description: document.getElementById("inputDescription").value
       }
 
-      console.log(card);
+      //console.log(card);
    
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-          console.log("yes");
+         // console.log("yes");
           window.location = '';
         }
       }
@@ -98,7 +98,7 @@
       xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
           var responseObject = JSON.parse(this.responseText);
-          console.log(this.responseText);
+          //console.log(this.responseText);
           document.getElementById("dtinputUserId").innerHTML = responseObject.user.id;
           document.getElementById("dtinputTitle").innerHTML=responseObject.title;
           document.getElementById("dtinputType").innerHTML=responseObject.type;
@@ -107,12 +107,45 @@
           document.getElementById("dtuserName").innerHTML=responseObject.user.firstName +" "+ responseObject.user.lastName;
           document.getElementById("dtemail").innerHTML=responseObject.user.email;
 
-
         }
       }
       var url = "http://localhost:8082/api/card/"+cardID;
       xhr.open("GET", url, true);
       xhr.send();
+    }
+
+    function sortCards(type){
+       
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          console.log('doublecheck');
+          var yoyoallcards = JSON.parse(this.responseText);
+          var cardArray =[];
+          var hetElement = document.getElementById("Korea");
+          if(type!='alle'){
+            cardArray = splitArray(yoyoallcards,type);
+            hetElement.innerHTML = makeCardGrid(cardArray);
+          }else{
+            hetElement.innerHTML = makeCardGrid(yoyoallcards);
+          }
+        }
+        }
+      var url = "http://localhost:8082/api/card/all";
+      xhr.open("GET", url, true);
+      xhr.send();
+    } 
+
+    function splitArray(allCards,type){
+      var endArray=[];
+      for(x=0;x<allCards.length;x++){
+        console.log(allCards[x].type);
+        if(allCards[x].type==type){
+          endArray.push(allCards[x]);
+        }
+      }
+      console.log(endArray);
+      return endArray;
     }
 
   </script>
@@ -151,6 +184,12 @@
             <p class="lead mb-5 text-white">Hier kunt u een vraag of aanbod plaatsen.</p>
             <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal" href="#">
               Klik om te plaatsen &raquo; </a>
+              <a class="btn btn-primary btn-lg" id="allCards" onclick=sortCards('alle') href="#">
+                  Alle &raquo; </a>
+                  <a class="btn btn-primary btn-lg" id="vraagCards" onclick=sortCards('Vraag') href="#">
+                      Vraag &raquo; </a>
+                      <a class="btn btn-primary btn-lg" id="aanbodCards" onclick=sortCards('Aanbod') href="#">
+                          Aanbod &raquo; </a>
           </div>
         </div>
     </header>
@@ -240,7 +279,7 @@
               </tr>
               <tr>
                 <td>Omschrijving:</td>
-                <td> <div type="text" id=dtinputDescription></div> </td>
+                <td> <div type="text" class="divDetail" id=dtinputDescription></div> </td>
               </tr>
               <tr>
                 <td>Aangemaakt op:</dt>

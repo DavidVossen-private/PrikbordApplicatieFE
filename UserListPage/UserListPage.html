@@ -25,11 +25,11 @@
         xhr.send();
       }
       function maakUserTabel(users){
-        console.log(users);
+        //console.log(users);
         var tableString = "<table class='table table-striped'>";
-        tableString += "<tr><th>Id</th><th>Voornaam</th><th>LastNaam</th><th>EmailAddress</th></tr>";
+        tableString += "<tr><th>Id</th><th>Voornaam</th><th>LastNaam</th><th>EmailAddress</th><th>edit</th></tr>";
         for(var i = 0; i < users.length ; i++){
-          tableString += "<tr><td>"+users[i].id+"</td><td>"+users[i].firstName+"</td><td>"+users[i].lastName+"</td><td>"+users[i].email+"</td></tr>"
+          tableString += "<tr><td>"+users[i].id+"</td><td>"+users[i].firstName+"</td><td>"+users[i].lastName+"</td><td>"+users[i].email+"</td><td><button onclick='getUser("+users[i].id+")' id='editbutton'class='btn btn-info btn-lg' data-toggle='modal' data-target='#editModal'>edit</td></tr>"
         }
         tableString += "</table>";
         var tableHolder = document.getElementById("tableHolder");
@@ -55,6 +55,58 @@
         xhr.open("POST", url, true);
         xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send(user);
+      }
+      function getUser(Userid){
+        var xhr = new XMLHttpRequest();
+        var responseObject = {};
+        xhr.onreadystatechange = function () {
+        if (this.readyState == 4) {
+          var responseObject = JSON.parse(this.responseText);
+          //console.log(this.responseText);
+          document.getElementById("modalinputUserId").value = responseObject.id;
+          document.getElementById("modalVoornaam").value = responseObject.firstName;
+          document.getElementById("modalAchternaam").value = responseObject.lastName;
+          document.getElementById("modalEmail").value =responseObject.email;
+          
+          
+        }
+        
+      }
+      var url = "http://localhost:8082/api/user/"+Userid;
+      xhr.open("GET", url, true);
+      xhr.send();
+      }
+
+      function updateUser(userID){
+        alert(userID);
+        var xhr = new XMLHttpRequest();
+        var responseObject = {};    
+        xhr.onreadystatechange = function(){
+          if(this.readyState == 4){
+            var responseObject = JSON.parse(this.responseText);
+            //console.log(responseObject);
+            //alert(responseObject);
+            var xhr2 = new XMLHttpRequest();
+            xhr2.onreadystatechange=function(){
+              if(this.readyState==4){
+                responseObject.email=document.getElementById("modalEmail").value;
+                responseObject.firstName='henk';
+              }
+            }
+            var url2 = "http://localhost:8082/api/user/update/"+userID;
+            xhr2.open("PUT", url2, true);
+            xhr2.setRequestHeader("Content-Type", "application/json");
+            //alert(JSON.stringify(responseObject.email));
+            //alert(document.getElementById("modalEmail").value);
+            console.log(responseObject);
+            alert(JSON.stringify(responseObject).email);
+            xhr2.send(JSON.stringify(responseObject));
+          }
+        }
+        var url = "http://localhost:8082/api/user/"+userID;
+        xhr.open("GET", url, true);
+        //xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send();
       }
   </script>
 </head>
@@ -139,6 +191,54 @@
     </div>
     <!-- /.container -->
   </footer>
+
+    <!-- Modal edit-->
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit user information</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>User ID:</td>
+                <td><input type="number"  id=modalinputUserId value="" class="form-control" maxlength="2"></td>
+              </tr>
+              <tr>
+                <td> Voornaam: </td>
+                <td>
+                  <input type="text" id="modalVoornaam" value="">
+                </td>
+              </tr>
+              <tr>
+                <td>Achternaam </td>
+                <td><input type="text" id="modalAchternaam" value=""></td>
+              </tr>
+              <tr>
+                <td>Emailadress:</td>
+                <td><input type="text" id="modalEmail" value=""></td>
+              </tr>
+              <tr>
+                  <td>Telefoonnr:</td>
+                  <td><input type="text" id="modalTelNr" value=""></td>
+                </tr>
+            </table>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick=updateUser(modalinputUserId.value) data-dismiss="modal">Save
+              changes</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
 
 </body>

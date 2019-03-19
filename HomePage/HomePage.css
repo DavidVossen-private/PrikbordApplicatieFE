@@ -1,3 +1,9 @@
+.divDetail
+{
+word-wrap: break-word;
+max-width: 370px;
+}
+
 a:hover, a:visited, a:link, a:active
 {
     text-decoration: none;
