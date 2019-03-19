@@ -19,7 +19,7 @@
       var xhp = new XMLHttpRequest();
       xhp.onreadystatechange = function () {
         if (this.readyState == 4) {
-          console.log(this.responseText)
+          //console.log(this.responseText)
           var cardArrayObject = JSON.parse(this.responseText);
           var hetElement = document.getElementById("Korea");
           hetElement.innerHTML = makeCardGrid(cardArrayObject);
@@ -38,9 +38,9 @@
       // Loop through members of the object
       for (var i = 0; i < inputObject.length; i++) {
         tempObject = inputObject[i];
-        console.log(tempObject);
+        //console.log(tempObject);
         // Add our row:
-        html += cardObjectToHtmlCard(tempObject, i);
+        html += cardObjectToHtmlCard(tempObject,i);
       }
       // Finish the table:
       //html += "</div>";
@@ -64,7 +64,7 @@
                 "</a>" +
               "</div>";
     }
-
+    
     function getUserFromID(inputStringId, iteration) {
       var xhp = new XMLHttpRequest();
       xhp.onreadystatechange = function () {
@@ -89,7 +89,6 @@
         return "Onbekend";
       }
     }
-
     function returnCardImage(inputStringType) {
       HEIGHT_IN_PIXELS = 240;
       PRE_STRING = "<img height = " + HEIGHT_IN_PIXELS + "class='card-img-top' src=";
@@ -113,12 +112,12 @@
         description: document.getElementById("inputDescription").value
       }
 
-      console.log(card);
+      //console.log(card);
    
       var xhr = new XMLHttpRequest();
       xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-          console.log("yes");
+         // console.log("yes");
           window.location = '';
         }
       }
@@ -133,7 +132,7 @@
       xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
           var responseObject = JSON.parse(this.responseText);
-          console.log(this.responseText);
+          //console.log(this.responseText);
           document.getElementById("dtinputUserId").innerHTML = responseObject.user.id;
           document.getElementById("dtinputTitle").innerHTML=responseObject.title;
           document.getElementById("dtinputType").innerHTML=responseObject.type;
@@ -141,6 +140,7 @@
           document.getElementById("dtDate").innerHTML=responseObject.date;
           document.getElementById("dtuserName").innerHTML=responseObject.user.firstName +" "+ responseObject.user.lastName;
           document.getElementById("dtemail").innerHTML=responseObject.user.email;
+
         }
       }
       var url = "http://localhost:8082/api/card/"+cardID;
@@ -148,188 +148,239 @@
       xhr.send();
     }
 
-    function searchCards() {
-      var zoekTekst = document.getElementById("zoekTekst").value;
-      var xhp = new XMLHttpRequest();
-      xhp.onreadystatechange = function () {
+    function sortCards(type){
+       
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
         if (this.readyState == 4) {
-          console.log(this.responseText)
-          var cardObject = JSON.parse(this.responseText);
+          console.log('doublecheck');
+          var yoyoallcards = JSON.parse(this.responseText);
+          var cardArray =[];
           var hetElement = document.getElementById("Korea");
-          hetElement.innerHTML = makeCardGrid(cardObject);
+          if(type!='alle'){
+            cardArray = splitArray(yoyoallcards,type);
+            hetElement.innerHTML = makeCardGrid(cardArray);
+          }else{
+            hetElement.innerHTML = makeCardGrid(yoyoallcards);
+          }
+        }
+        }
+      var url = "http://localhost:8082/api/card/all";
+      xhr.open("GET", url, true);
+      xhr.send();
+    } 
+
+    function splitArray(allCards,type){
+      var endArray=[];
+      for(x=0;x<allCards.length;x++){
+        console.log(allCards[x].type);
+        if(allCards[x].type==type){
+          endArray.push(allCards[x]);
         }
       }
-      if(zoekTekst == "") {
-        xhp.open("GET", "http://localhost:8082/api/card/all", true);
-      } else {
-        xhp.open("GET", "http://localhost:8082/api/card/search/" + zoekTekst, true);
-      }
-      xhp.send();
-    }
+      console.log(endArray);
+      return endArray;
+          }
+
+      function searchCards() {
+        var zoekTekst = document.getElementById("zoekTekst").value;
+        var xhp = new XMLHttpRequest();
+        xhp.onreadystatechange = function () {
+          if (this.readyState == 4) {
+            console.log(this.responseText)
+            var cardObject = JSON.parse(this.responseText);
+            var hetElement = document.getElementById("Korea");
+            hetElement.innerHTML = makeCardGrid(cardObject);
+          }
+        }
+        if(zoekTekst == "") {
+          xhp.open("GET", "http://localhost:8082/api/card/all", true);
+        } else {
+          xhp.open("GET", "http://localhost:8082/api/card/search/" + zoekTekst, true);
+        }
+        xhp.send(); }
+
 
   </script>
 </head>
 
 <body>
 
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
-    <div class="container">
-      <a class="navbar-brand">Young Colfield</a>
-      <div class="collapse navbar-collapse" id="navbarResponsive">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="#">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../index.html">Mijn account</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="../UserListPage/UserListPage.html">Deelnemerslijst</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <body>
 
-  <!-- Header -->
-  <header class="bg-primary py-5 mb-5">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center">
-        <div class="col-lg-12">
-          <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
-          <p class="lead mb-5 text-white">Plaats een vraag of aanbod, of doorzoek de huidige kaartjes.</p>
-          <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal" href="#">
-            Klik om te plaatsen &raquo; </a>
-          <p class="lead mb-5 text-white"> </p>
-          <div class="container">
-            <div class="row justify-content-center">
-              <div class="col-12 col-md-10 col-lg-8">
-                <div class="card-body row no-gutters align-items-center">
-                  <!--<div class="col-auto"> <i class="fas fa-search h4 text-body"> </i> </div>-->
-                  <!--end of col-->
-                  <div class="col">
-                      <input class="form-control form-control-lg" id="zoekTekst" onkeyup=searchCards() type="search" placeholder="Zoekterm">
-                  </div>
-                  <!--end of col
-                  <div class="col-auto">
-                      <button class="btn btn-secondary btn-lg" onclick=searchCards()>Zoek</button>
-                  </div>-->
-                  <!--end of col-->
-                </div>
-              </div>
-              <!--end of col-->
-            </div>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+      <div class="container">
+        <a class="navbar-brand">Young Colfield</a>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Mijn account</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="../UserListPage/UserListPage.html">Deelnemerslijst</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <header class="bg-primary py-5 mb-5">
+      <div class="container h-100">
+        <div class="row h-100 align-items-center">
+          <div class="col-lg-12">
+            <h1 class="display-4 text-white mt-5 mb-2">Digitaal prikbord</h1>
+            <p class="lead mb-5 text-white">Hier kunt u een vraag of aanbod plaatsen.</p>
+            <a class="btn btn-primary btn-lg" data-toggle="modal" data-target="#exampleModal" href="#">
+              Klik om te plaatsen &raquo; </a>
+              <a class="btn btn-primary btn-lg" id="allCards" onclick=sortCards('alle') href="#">
+                  Alle &raquo; </a>
+                  <a class="btn btn-primary btn-lg" id="vraagCards" onclick=sortCards('Vraag') href="#">
+                      Vraag &raquo; </a>
+                      <a class="btn btn-primary btn-lg" id="aanbodCards" onclick=sortCards('Aanbod') href="#">
+                          Aanbod &raquo; </a>
+                          <p class="lead mb-5 text-white"> </p>
+                          <div class="container">
+                            <div class="row justify-content-center">
+                              <div class="col-12 col-md-10 col-lg-8">
+                                <div class="card-body row no-gutters align-items-center">
+                                  <!--<div class="col-auto"> <i class="fas fa-search h4 text-body"> </i> </div>-->
+                                  <!--end of col-->
+                                  <div class="col">
+                                      <input class="form-control form-control-lg" id="zoekTekst" onkeyup=searchCards() type="search" placeholder="Zoekterm">
+                                  </div>
+                                  <!--end of col
+                                  <div class="col-auto">
+                                      <button class="btn btn-secondary btn-lg" onclick=searchCards()>Zoek</button>
+                                  </div>-->
+                                  <!--end of col-->
+                                </div>
+                              </div>
+                              <!--end of col-->
+                            </div>
+          </div>
+        </div>
+    </header>
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Vraag/aanbod aanmaken</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>User ID:</td>
+                <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td>
+              </tr>
+              <tr>
+                <td> Omschrijving: </td>
+                <td>
+                  <form>
+                    <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod
+                    </label>
+                    <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label>
+                  </form>
+                </td>
+              </tr>
+              <tr>
+                <td>Titel (max 40 tekens):</td>
+                <td><input type="text" id=inputTitle class="form-control" maxlength="40"></td>
+              </tr>
+              <tr>
+                <td>Omschrijving (max 200 tekens):</td>
+                <td> <textarea class="form-control" id=inputDescription rows="5" maxlength="200"></textarea> </td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick=createCard() data-dismiss="modal">Save
+              changes</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
-  </header>
-
-  <!-- Modal -->
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Vraag/aanbod aanmaken</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <table>
-            <tr> <td>User ID:</td> <td><input type="number" id=inputUserId class="form-control" maxlength="2"></td> </tr> <tr>
-              <td> Omschrijving: </td>
-              <td> <form> <label class="radio-inline"> <input type="radio" name="inputType" value="Aanbod" checked> Aanbod </label>
-                          <label class="radio-inline"> <input type="radio" name="inputType" value="Vraag"> Vraag </label> </form> </td>
-            </tr>
-            <tr>
-              <td>Titel (max 40 tekens):</td>
-              <td><input type="text" id=inputTitle class="form-control" maxlength="40"></td>
-            </tr>
-            <tr>
-              <td>Omschrijving (max 200 tekens):</td>
-              <td> <textarea class="form-control" id=inputDescription rows="5" maxlength="200"></textarea> </td>
-            </tr>
-          </table>
-        </div>
-
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" onclick=createCard() data-dismiss="modal">Save
-            changes</button>
-          <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
     </div>
-  </div>
 
-  <!-- Modal details-->
-  <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Details kaart</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
+    <!-- Modal details-->
+    <div class="modal fade" id="detailModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Details kaart</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
 
-        <div class="modal-body">
-          <table>
-            <tr>
-              <td>User ID:</td>
-              <td><div type="number" id=dtinputUserId ></div></td>
-            </tr>
-            <tr>
-              <td>Naam: </td>
-              <td><div type="text" id=dtuserName ></div></td>
-            </tr>
-            <tr>
-              <td>Email: </td>
-              <td><div type="text" id=dtemail ></div></td>
-            <tr>
-              <td> Soort </td>
-              <td>
-                <div type="text" id=dtinputType></div>
-              </td>
-            </tr>
-            <tr>
-              <td>Titel: </td>
-              <td><div type="text" id=dtinputTitle></td>
-            </tr>
-            <tr>
-              <td>Omschrijving:</td>
-              <td> <div type="text" id=dtinputDescription></div> </td>
-            </tr>
-            <tr>
-              <td>Aangemaakt op:</dt>
-              <td> <div type="text" id=dtDate></div></td>
+          <div class="modal-body">
+            <table>
+              <tr>
+                <td>User ID:</td>
+                <td><div type="number" id=dtinputUserId ></div></td>
               </tr>
-          </table>
+              <tr>
+                <td>Naam: </td>
+                <td><div type="text" id=dtuserName ></div></td>
+              </tr>
+              <tr>
+                <td>Email: </td>
+                <td><div type="text" id=dtemail ></div></td>
+              <tr>
+                <td> Soort </td>
+                <td>
+                  <div type="text" id=dtinputType></div>
+                </td>
+              </tr>
+              <tr>
+                <td>Titel: </td>
+                <td><div type="text" id=dtinputTitle></td>
+              </tr>
+              <tr>
+                <td>Omschrijving:</td>
+                <td> <div type="text" class="divDetail" id=dtinputDescription></div> </td>
+              </tr>
+              <tr>
+                <td>Aangemaakt op:</dt>
+                <td> <div type="text" id=dtDate></div></td>
+                </tr>
+            </table>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!-- Page Content -->
-  <div class="container">
-    <!-- /.row -->
-    <div class="row" id="Korea">
-    </div>
-    <!-- /.row -->
-  </div>
-  <!-- /.container -->
-
-  <!-- Footer -->
-  <footer class="py-5 bg-dark">
+    <!-- Page Content -->
     <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; Young Colfield 2019</p>
+      <!-- /.row -->
+      <div class="row" id="Korea">
+      </div>
+      <!-- /.row -->
     </div>
     <!-- /.container -->
-  </footer>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Young Colfield 2019</p>
+      </div>
+      <!-- /.container -->
+    </footer>
 
 
-</body>
+  </body>
 
 </html>
