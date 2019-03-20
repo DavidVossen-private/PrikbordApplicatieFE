@@ -16,10 +16,17 @@
         var loginPassword = document.getElementById("inputPassword").value;
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function(){
+          if(this.readyState == 4){
+            var user = JSON.parse(this.responseText);
+            var userid = user.id;
+            localStorage.setItem('ycappuser', userid);
             window.location = "HomePage/HomePage.html";
+          }
         }
-        var url = "http://localhost:8082/api/user/"+loginNaam+ "/"+loginPassword;
+        var url = "http://localhost:8082/api/user/login/"+loginNaam+ "/"+loginPassword;
+        console.log(url);
         xhr.open("POST",url, true);
+        xhr.setRequestHeader("Content-Type", "application/json");
         xhr.send("{}");
       }
   </script>

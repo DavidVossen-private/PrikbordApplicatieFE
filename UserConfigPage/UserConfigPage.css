@@ -1,0 +1,46 @@
+.navbar-custom {
+    background-color: #fff;
+    color: #e46a35;
+}
+/* change the brand and text color */
+.navbar-custom .navbar-brand,
+.navbar-custom .navbar-text {
+    color: #e46a35;
+}
+/* change the link color */
+.navbar-custom .navbar-nav .nav-link {
+    color: #555d66;
+}
+/* change the color of active or hovered links */
+.navbar-custom .nav-item.active .nav-link,
+.navbar-custom .nav-item:hover .nav-link {
+    color: #e46a35;
+}
+
+.header-container-wrapper{
+    background-color: #e46a35;
+}
+
+.bg-primary-important{
+    background-color: #e46a35;
+}
+
+.bg-primary-important-inverse{
+    background-color: #fff;
+    color : #fff;
+}
+.btn-primary{
+    color:#e46a35;
+    background-color: #fff;
+    border-color:#fff;
+  }
+  .btn-primary:hover{
+    color:#555d66;
+    background-color: #fff;
+    border-color:#fff; 
+  }
+  .btn-primary:target{
+    color:#555d66;
+    background-color: #fff;
+    border-color:#fff; 
+  }
