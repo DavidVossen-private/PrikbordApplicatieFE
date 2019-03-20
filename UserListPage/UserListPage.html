@@ -67,6 +67,17 @@
           document.getElementById("modalVoornaam").value = responseObject.firstName;
           document.getElementById("modalAchternaam").value = responseObject.lastName;
           document.getElementById("modalEmail").value =responseObject.email;
+
+          var user={};
+          user.id=responseObject.id;
+          user.firstName=responseObject.firstName;
+          user.lastName=responseObject.lastName;
+          user.password=responseObject.password;
+          user.email=responseObject.email;
+          console.log(user);
+          //alert(user);
+          return user;
+
           
           
         }
@@ -78,8 +89,8 @@
       }
 
       function updateUser(userID){
-        alert(userID);
         var xhr = new XMLHttpRequest();
+        var user={};
         var responseObject = {};    
         xhr.onreadystatechange = function(){
           if(this.readyState == 4){
@@ -89,18 +100,23 @@
             var xhr2 = new XMLHttpRequest();
             xhr2.onreadystatechange=function(){
               if(this.readyState==4){
-                responseObject.email=document.getElementById("modalEmail").value;
-                responseObject.firstName='henk';
               }
             }
             var url2 = "http://localhost:8082/api/user/update/"+userID;
+            
+            user.id=responseObject.id;
+            user.firstName=document.getElementById("modalVoornaam").value;
+            user.lastName=document.getElementById("modalAchternaam").value;
+            user.password=responseObject.password;
+            user.email=document.getElementById("modalEmail").value;
+
+
             xhr2.open("PUT", url2, true);
             xhr2.setRequestHeader("Content-Type", "application/json");
             //alert(JSON.stringify(responseObject.email));
             //alert(document.getElementById("modalEmail").value);
-            console.log(responseObject);
-            alert(JSON.stringify(responseObject).email);
-            xhr2.send(JSON.stringify(responseObject));
+            xhr2.send(JSON.stringify(user));
+            location.reload(true);
           }
         }
         var url = "http://localhost:8082/api/user/"+userID;
@@ -224,10 +240,6 @@
                 <td>Emailadress:</td>
                 <td><input type="text" id="modalEmail" value=""></td>
               </tr>
-              <tr>
-                  <td>Telefoonnr:</td>
-                  <td><input type="text" id="modalTelNr" value=""></td>
-                </tr>
             </table>
           </div>
 
